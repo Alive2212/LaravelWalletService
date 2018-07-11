@@ -1,0 +1,43 @@
+{
+    "name": "alive2212/laravelwalletservice",
+    "description": ":description",
+    "license": "license",
+    "authors": [
+        {
+            "name": "author name",
+            "email": "author email",
+            "homepage": "author homepage"
+        }
+    ],
+    "homepage": "https://github.com/alive2212/laravelwalletservice",
+    "keywords": ["Laravel", "LaravelWalletService"],
+    "require": {
+        "illuminate/support": "~5",
+        "alive2212/laravel-smart-restful": "^1.0",
+        "alive2212/laravel-string-helper": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0",
+        "orchestra/testbench": "~3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Alive2212\\LaravelWalletService\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Alive2212\\LaravelWalletService\\Tests\\": "tests"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Alive2212\\LaravelWalletService\\LaravelWalletServiceServiceProvider"
+            ],
+            "aliases": {
+                "LaravelWalletService": "Alive2212\\LaravelWalletService\\Facades\\LaravelWalletService"
+            }
+        }
+    }
+}
