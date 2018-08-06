@@ -36,9 +36,17 @@ class LaravelWalletService
             $this->firstOrCreateStuff($stuffTitle)
         );
 
-        $this->makePayment($amount, $description, $extraValue, $authorId);
+        return $this->storePayment($amount, $description, $extraValue, $authorId);
     }
 
+    /**
+     * @param $userId
+     * @param $amount
+     * @param $stuffTitle
+     * @param $description
+     * @param array $extraValue
+     * @param null $authorId
+     */
     public function credit($userId, $amount, $stuffTitle, $description, array $extraValue, $authorId = null)
     {
         LaravelWalletPaymentSingleton::setType(
@@ -61,7 +69,7 @@ class LaravelWalletService
             $this->firstOrCreateStuff($stuffTitle)
         );
 
-        $this->makePayment($amount, $description, $extraValue, $authorId);
+        return $this->storePayment($amount, $description, $extraValue, $authorId);
     }
 
     /**
@@ -72,7 +80,7 @@ class LaravelWalletService
      * @param string $description
      * @return AliveWalletBase
      */
-    public function firstOrCreateBase($userId, $author_id = null, $title = '', $subtitle = '', $description = '')
+    private function firstOrCreateBase($userId, $author_id = null, $title = '', $subtitle = '', $description = '')
     {
         $base = new AliveWalletBase();
         $base = $base->firstOrCreate([
@@ -95,7 +103,7 @@ class LaravelWalletService
      * @param null $author_id
      * @return AliveWalletStuff
      */
-    public function firstOrCreateStuff($title = '', $subtitle = '', $description = '', $userId = null, $author_id = null)
+    private function firstOrCreateStuff($title = '', $subtitle = '', $description = '', $userId = null, $author_id = null)
     {
         $stuff = new AliveWalletStuff();
         $stuff = $stuff->firstOrCreate([
@@ -110,11 +118,18 @@ class LaravelWalletService
         return $stuff;
     }
 
-    public function makePayment($amount, $description, array $extraValue, $author_id = null, Carbon $expireTime = null)
+    /**
+     * @param $amount
+     * @param $description
+     * @param array $extraValue
+     * @param null $author_id
+     * @param Carbon|null $expireTime
+     */
+    private function storePayment($amount, $description, array $extraValue, $author_id = null, Carbon $expireTime = null)
     {
         $payment = new AliveWalletPayment();
 
-        $payment->create([
+        return $payment->create([
             'author_id' => $author_id,
             'from' => LaravelWalletPaymentSingleton::getFrom()['id'],
             'to' => LaravelWalletPaymentSingleton::getTo()['id'],
@@ -128,10 +143,36 @@ class LaravelWalletService
         // TODO dispatch a job to expire a payment
     }
 
+    /**
+     * @param $userId
+     * @return int
+     */
     public function getUserBalance($userId)
     {
         $walletPayment = new AliveWalletPayment();
-        return $walletPayment->getLastUserBalance($userId);
+        $from = $this->firstOrCreateBase($userId)['id'];
+        $to = $this->
+        firstOrCreateBase(
+            null,
+            null,
+            LaravelWalletPaymentSingleton::getBaseTitle())['id'];
+        return $walletPayment->calcLastBalance($from, $to);
+    }
+
+    /**
+     * @param $userId
+     * @return mixed
+     */
+    public function getUserPaymentList($userId)
+    {
+        $walletPayment = new AliveWalletPayment();
+        $from = $this->firstOrCreateBase($userId)['id'];
+        $to = $this->
+        firstOrCreateBase(
+            null,
+            null,
+            LaravelWalletPaymentSingleton::getBaseTitle())['id'];
+        return $walletPayment->getPaymentList($from, $to);
     }
 
 }

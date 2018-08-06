@@ -15,7 +15,7 @@ Route::prefix('api')->group(function () {
     Route::prefix('v1')->group(function () {
         Route::prefix('alive')->group(function () {
             Route::prefix('wallet')->group(function () {
-                Route::resource('','Alive2212\LaravelWalletService\Http\Controllers\AliveWalletPaymentController');
+//                Route::resource('','Alive2212\LaravelWalletService\Http\Controllers\AliveWalletPaymentController');
             });
         });
     });

@@ -51,17 +51,19 @@ class AliveWalletPayment extends BaseModel
      */
     public function getLastPayment($from, $to)
     {
-        $payment = new AliveWalletPayment();
-        $payment = $payment->where([
-            ['from', '=', $from],
-            ['to', '=', $to],
-            ['revoked', '=', 0],
-        ])->orWhere([
-            ['from', '=', $to],
-            ['to', '=', $from],
-            ['revoked', '=', 0],
-        ]);
+        $payment = $this->whereFromTo($from, $to);
         return $payment->orderBy('updated_at', 'DESC')->take(1)->first();
+    }
+
+    /**
+     * @param $from
+     * @param $to
+     * @return mixed
+     */
+    public function getPaymentList($from, $to)
+    {
+        $payment = $this->whereFromTo($from, $to);
+        return $payment->orderBy('updated_at', 'DESC')->get();
     }
 
     /**
@@ -94,15 +96,23 @@ class AliveWalletPayment extends BaseModel
         return -$lastPaymentParams['balance'];
     }
 
-    public function getLastUserBalance($userId)
+    /**
+     * @param $from
+     * @param $to
+     * @return AliveWalletPayment
+     */
+    public function whereFromTo($from, $to)
     {
-        $walletService = new LaravelWalletService();
-        $from = $walletService->firstOrCreateBase($userId)['id'];
-        $to = $walletService->
-        firstOrCreateBase(
-            null,
-            null,
-            LaravelWalletPaymentSingleton::getBaseTitle())['id'];
-        return $this->calcLastBalance($from, $to);
+        $payment = new AliveWalletPayment();
+        $payment = $payment->where([
+            ['from', '=', $from],
+            ['to', '=', $to],
+            ['revoked', '=', 0],
+        ])->orWhere([
+            ['from', '=', $to],
+            ['to', '=', $from],
+            ['revoked', '=', 0],
+        ]);
+        return $payment;
     }
 }
