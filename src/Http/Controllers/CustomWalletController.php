@@ -6,11 +6,13 @@ use Alive2212\LaravelSmartResponse\ResponseModel;
 use Alive2212\LaravelSmartResponse\SmartResponse\SmartResponse;
 use Alive2212\LaravelSmartRestful\BaseController;
 use Alive2212\LaravelTicketService\AliveTicket;
+use Alive2212\LaravelWalletService\AliveWalletPayment;
 use Alive2212\LaravelWalletService\LaravelWalletService;
 use Illuminate\Http\Request;
 
 class CustomWalletController extends BaseController
 {
+    protected $localPrefix = 'laravel-wallet-service';
     /**
      * @var
      */
@@ -23,14 +25,14 @@ class CustomWalletController extends BaseController
         'amount' => 'required',
         'stuff_title' => 'required',
         'description' => 'required',
-        'array' => 'required',
+        'extra_value' => 'required',
     ];
 
     protected $userCreditValidateParams = [
         'amount' => 'required',
         'stuff_title' => 'required',
         'description' => 'required',
-        'array' => 'required',
+        'extra_value' => 'required',
     ];
 
     /**
@@ -38,8 +40,12 @@ class CustomWalletController extends BaseController
      */
     public function initController()
     {
-        $this->model = new AliveTicket();
+        $this->model = new AliveWalletPayment();
         $this->wallet = new LaravelWalletService();
+
+        $this->middleware([
+            'auth:api',
+        ]);
     }
 
     public function paymentList(Request $request)
@@ -65,7 +71,7 @@ class CustomWalletController extends BaseController
         $response = new ResponseModel();
 
         // validate
-        $response = $this->validate($request, $response,$this->userCreditValidateParams);
+        $response = $this->validateRequest($request, $response,$this->userCreditValidateParams);
 
         // show error if has any error
         if (!is_null($response->getError())){
@@ -79,8 +85,8 @@ class CustomWalletController extends BaseController
             $request['amount'],
             $request['stuff_title'],
             $request['description'],
-            json_decode($request['array'], true),
-            isset($request['author_id']) ? $request['author_id'] : null
+            json_decode($request['extra_value'],true),
+            auth()->id()
         );
 
         // initialize response
@@ -98,7 +104,7 @@ class CustomWalletController extends BaseController
         $response = new ResponseModel();
 
         // validate
-        $response = $this->validate($request, $response,$this->userDebitValidateParams);
+        $response = $this->validateRequest($request, $response,$this->userDebitValidateParams);
 
         // show error if has any error
         if (!is_null($response->getError())){
@@ -111,8 +117,8 @@ class CustomWalletController extends BaseController
             $request['amount'],
             $request['stuff_title'],
             $request['description'],
-            json_decode($request['array'], true),
-            isset($request['author_id']) ? $request['author_id'] : null
+            json_decode($request['extra_value'],true),
+            auth()->id()
         );
 
         // initialize response
@@ -147,7 +153,7 @@ class CustomWalletController extends BaseController
      * @param array $validationArray
      * @return ResponseModel
      */
-    private function validate(Request $request, ResponseModel $response,array $validationArray)
+    private function validateRequest(Request $request, ResponseModel $response,array $validationArray)
     {
         $validationErrors = $this->checkRequestValidation($request, $validationArray);
         if ($validationErrors != null) {

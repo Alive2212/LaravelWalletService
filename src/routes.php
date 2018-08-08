@@ -13,16 +13,18 @@
 
 Route::prefix('api')->group(function () {
     Route::prefix('v1')->group(function () {
-        // vendor name
-        Route::prefix('alive')->group(function () {
-            // package name
-            Route::prefix('wallet')->group(function () {
-                Route::get('balance', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@balance')->name('wallet_service.balance');
-                Route::get('payment_list', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@paymentList')->name('wallet_service.payment_list');
-                Route::post('credit', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@credit')->name('wallet_service.credit');
-                Route::post('debit', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@debit')->name('wallet_service.debit');
-            });
+        Route::prefix('custom')->group(function () {
+            // vendor name
+            Route::prefix('alive')->group(function () {
+                // package name
+                Route::prefix('wallet')->group(function () {
+                    Route::get('balance', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@balance')->name('wallet_service.balance');
+                    Route::get('payment_list', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@paymentList')->name('wallet_service.payment_list');
+                    Route::post('credit', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@credit')->name('wallet_service.credit');
+                    Route::post('debit', 'Alive2212\LaravelWalletService\Http\Controllers\CustomWalletController@debit')->name('wallet_service.debit');
+                });
 
+            });
         });
         // vendor name
         Route::prefix('alive')->group(function () {
