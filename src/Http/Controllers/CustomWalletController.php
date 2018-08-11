@@ -25,14 +25,14 @@ class CustomWalletController extends BaseController
         'amount' => 'required',
         'stuff_title' => 'required',
         'description' => 'required',
-        'extra_value' => 'required',
+        'extra_value' => 'required | json',
     ];
 
     protected $userCreditValidateParams = [
         'amount' => 'required',
         'stuff_title' => 'required',
         'description' => 'required',
-        'extra_value' => 'required',
+        'extra_value' => 'required | json',
     ];
 
     /**
