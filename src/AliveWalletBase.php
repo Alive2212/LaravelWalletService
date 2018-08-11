@@ -3,6 +3,7 @@
 namespace Alive2212\LaravelWalletService;
 
 use Alive2212\LaravelSmartRestful\BaseModel;
+use App\User;
 
 class AliveWalletBase extends BaseModel
 {
@@ -19,6 +20,14 @@ class AliveWalletBase extends BaseModel
         'description',
         'revoked',
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
     /**
      * @return null

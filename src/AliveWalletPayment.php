@@ -4,6 +4,7 @@ namespace Alive2212\LaravelWalletService;
 
 use Alive2212\LaravelSmartRestful\BaseModel;
 use Alive2212\LaravelWalletService\Observers\AliveWalletPaymentObserver;
+use App\User;
 
 class AliveWalletPayment extends BaseModel
 {
@@ -43,8 +44,6 @@ class AliveWalletPayment extends BaseModel
     {
         return $this->belongsTo(
             AliveWalletBase::class,
-            'alive_wallet_base',
-            'id',
             'from'
         );
     }
@@ -56,8 +55,6 @@ class AliveWalletPayment extends BaseModel
     {
         return $this->belongsTo(
             AliveWalletStuff::class,
-            'alive_wallet_stuff',
-            'id',
             'for'
         );
     }
@@ -69,8 +66,6 @@ class AliveWalletPayment extends BaseModel
     {
         return $this->belongsTo(
             AliveWalletBase::class,
-            'alive_wallet_base',
-            'id',
             'to'
         );
     }
@@ -102,7 +97,8 @@ class AliveWalletPayment extends BaseModel
      */
     public function getPaymentList($from, $to)
     {
-        $payment = $this->whereFromTo($from, $to);
+        $payment = $this->whereFromTo($from, $to)
+            ->with('author','from.user','to.user','for');
         return $payment->orderBy('updated_at', 'DESC')->get();
     }
 
