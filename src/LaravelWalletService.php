@@ -11,10 +11,11 @@ class LaravelWalletService
      * @param $amount
      * @param $stuffTitle
      * @param $description
-     * @param array $extraValue
+     * @param string $extraValue
      * @param null $authorId
+     * @return mixed
      */
-    public function debit($userId, $amount, $stuffTitle, $description, array $extraValue, $authorId = null)
+    public function debit($userId, $amount, $stuffTitle, $description, string $extraValue, $authorId = null)
     {
         LaravelWalletPaymentSingleton::setType(
             'debit'
@@ -44,10 +45,11 @@ class LaravelWalletService
      * @param $amount
      * @param $stuffTitle
      * @param $description
-     * @param array $extraValue
+     * @param string $extraValue
      * @param null $authorId
+     * @return mixed
      */
-    public function credit($userId, $amount, $stuffTitle, $description, array $extraValue, $authorId = null)
+    public function credit($userId, $amount, $stuffTitle, $description, string $extraValue, $authorId = null)
     {
         LaravelWalletPaymentSingleton::setType(
             'credit'
@@ -121,11 +123,12 @@ class LaravelWalletService
     /**
      * @param $amount
      * @param $description
-     * @param array $extraValue
+     * @param string $extraValue
      * @param null $author_id
      * @param Carbon|null $expireTime
+     * @return mixed
      */
-    private function storePayment($amount, $description, array $extraValue, $author_id = null, Carbon $expireTime = null)
+    private function storePayment($amount, $description, string $extraValue, $author_id = null, Carbon $expireTime = null)
     {
         $payment = new AliveWalletPayment();
 
