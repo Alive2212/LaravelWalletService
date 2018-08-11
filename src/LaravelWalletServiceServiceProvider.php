@@ -18,16 +18,28 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
         // Register event service provider
         App::register(EventServiceProvider::class);
 
-         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-         $this->loadRoutesFrom(__DIR__.'/routes.php');
+        // languages
+        $this->loadTranslationsFrom(resource_path('lang/vendor/alive2212'), 'laravel_setting_service');
+
+        // migrations
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        // routes
+        $this->loadRoutesFrom(__DIR__ . '/routes.php');
 
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
 
             // Publishing the configuration file.
             $this->publishes([
-                __DIR__.'/../config/laravel-wallet-service.php' => config_path('laravel-wallet-service.php'),
+                __DIR__ . '/../config/laravel-wallet-service.php' => config_path('laravel-wallet-service.php'),
             ], 'laravel-wallet-service.config');
+
+            // Publishing the translation files.
+            $this->publishes([
+                __DIR__ . '/../resources/lang/' => resource_path('lang/vendor/alive2212'),
+            ], 'laravel-wallet-service.lang');
+
         }
     }
 
@@ -38,7 +50,7 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/laravel-wallet-service.php', 'laravel-wallet-service');
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-wallet-service.php', 'laravel-wallet-service');
 
         // Register the service the package provides.
         $this->app->singleton('laravel-wallet-service', function ($app) {

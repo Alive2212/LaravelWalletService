@@ -174,5 +174,4 @@ class LaravelWalletService
             LaravelWalletPaymentSingleton::getBaseTitle())['id'];
         return $walletPayment->getPaymentList($from, $to);
     }
-
 }

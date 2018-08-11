@@ -12,7 +12,13 @@ This is where your description should go. Take a look at [contributing.md](contr
 Via Composer
 
 ``` bash
-$ composer require alive2212/laravelwalletservice
+$ composer require alive2212/laravel-wallet-service
+```
+
+
+install language
+``` bash
+$ php artisan vendor:publish --tag laravel-wallet-service.config
 ```
 
 ## Usage
