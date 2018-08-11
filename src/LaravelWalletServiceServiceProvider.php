@@ -18,8 +18,6 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
         // Register event service provider
         App::register(EventServiceProvider::class);
 
-        // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'alive2212');
-        // $this->loadViewsFrom(__DIR__.'/../resources/views', 'alive2212');
          $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
          $this->loadRoutesFrom(__DIR__.'/routes.php');
 
@@ -28,26 +26,8 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
 
             // Publishing the configuration file.
             $this->publishes([
-                __DIR__.'/../config/laravelwalletservice.php' => config_path('laravelwalletservice.php'),
-            ], 'laravelwalletservice.config');
-
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => base_path('resources/views/vendor/alive2212'),
-            ], 'laravelwalletservice.views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/alive2212'),
-            ], 'laravelwalletservice.views');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/alive2212'),
-            ], 'laravelwalletservice.views');*/
-
-            // Registering package commands.
-            // $this->commands([]);
+                __DIR__.'/../config/laravel-wallet-service.php' => config_path('laravel-wallet-service.php'),
+            ], 'laravel-wallet-service.config');
         }
     }
 
@@ -58,10 +38,10 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/laravelwalletservice.php', 'laravelwalletservice');
+        $this->mergeConfigFrom(__DIR__.'/../config/laravel-wallet-service.php', 'laravel-wallet-service');
 
         // Register the service the package provides.
-        $this->app->singleton('laravelwalletservice', function ($app) {
+        $this->app->singleton('laravel-wallet-service', function ($app) {
             return new LaravelWalletService;
         });
     }
@@ -73,6 +53,6 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
      */
     public function provides()
     {
-        return ['laravelwalletservice'];
+        return ['laravel-wallet-service'];
     }
 }

@@ -136,7 +136,7 @@ class LaravelWalletService
             'for' => LaravelWalletPaymentSingleton::getFor()['id'],
             'amount' => $amount,
             'description' => $description,
-            'extra_value' => serialize($extraValue),
+            'extra_value' => json_encode($extraValue),
             'locked' => is_null($expireTime) ? false : true,
         ]);
 
