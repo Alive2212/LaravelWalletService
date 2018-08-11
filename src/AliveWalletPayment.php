@@ -27,6 +27,55 @@ class AliveWalletPayment extends BaseModel
     ];
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function author()
+    {
+        return $this->belongsTo(
+            User::class
+        );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function from()
+    {
+        return $this->belongsTo(
+            AliveWalletBase::class,
+            'alive_wallet_base',
+            'id',
+            'from'
+        );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function for()
+    {
+        return $this->belongsTo(
+            AliveWalletStuff::class,
+            'alive_wallet_stuff',
+            'id',
+            'for'
+        );
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function to()
+    {
+        return $this->belongsTo(
+            AliveWalletBase::class,
+            'alive_wallet_base',
+            'id',
+            'to'
+        );
+    }
+
+    /**
      * @return null
      */
     public function getQueueableRelations()
