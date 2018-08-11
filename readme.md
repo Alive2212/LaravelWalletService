@@ -19,6 +19,7 @@ $ composer require alive2212/laravel-wallet-service
 install language
 ``` bash
 $ php artisan vendor:publish --tag laravel-wallet-service.config
+$ php artisan vendor:publish --tag laravel-wallet-service.lang
 ```
 
 ## Usage
