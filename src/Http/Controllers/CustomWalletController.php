@@ -56,7 +56,7 @@ class CustomWalletController extends BaseController
     public function paymentList(Request $request)
     {
         // get all payments records
-        $data = (array) $this->wallet->getUserPaymentList(
+        $data = $this->wallet->getUserPaymentList(
             $request->has('user_id') ?
                 $request['user_id'] :
                 auth()->id()
@@ -85,7 +85,7 @@ class CustomWalletController extends BaseController
 
 
         // create wallet object and credit to user
-        $data = (array) $this->wallet->credit(
+        $data = $this->wallet->credit(
             $request->has('user_id') ?
                 $request['user_id'] :
                 auth()->id(),
@@ -119,7 +119,7 @@ class CustomWalletController extends BaseController
         }
 
         // create wallet object and debit from user
-        $data = (array) $this->wallet->debit(
+        $data = $this->wallet->debit(
             $request->has('user_id') ?
                 $request['user_id'] :
                 auth()->id(),
@@ -141,7 +141,7 @@ class CustomWalletController extends BaseController
     public function balance(Request $request)
     {
         // get user balance
-        $data = (array) $this->wallet->getUserBalance(
+        $data = $this->wallet->getUserBalance(
             $request->has('user_id') ?
                 (int)$request['user_id'] :
                 auth()->id()
@@ -178,7 +178,7 @@ class CustomWalletController extends BaseController
      * @param bool $status
      * @return JsonResponse
      */
-    public function response(array $data, $methodName, $statusTag = 'successful', $status = true): JsonResponse
+    public function response($data, $methodName, $statusTag = 'successful', $status = true): JsonResponse
     {
         // create response object
         $response = new ResponseModel();
