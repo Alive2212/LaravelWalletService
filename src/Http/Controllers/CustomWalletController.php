@@ -56,7 +56,7 @@ class CustomWalletController extends BaseController
     public function paymentList(Request $request)
     {
         // get all payments records
-        $data = $this->wallet->getUserPaymentList(
+        $data = (array) $this->wallet->getUserPaymentList(
             $request->has('user_id') ?
                 $request['user_id'] :
                 auth()->id()
@@ -85,7 +85,7 @@ class CustomWalletController extends BaseController
 
 
         // create wallet object and credit to user
-        $data = $this->wallet->credit(
+        $data = (array) $this->wallet->credit(
             $request->has('user_id') ?
                 $request['user_id'] :
                 auth()->id(),
@@ -119,7 +119,7 @@ class CustomWalletController extends BaseController
         }
 
         // create wallet object and debit from user
-        $data = $this->wallet->debit(
+        $data = (array) $this->wallet->debit(
             $request->has('user_id') ?
                 $request['user_id'] :
                 auth()->id(),
