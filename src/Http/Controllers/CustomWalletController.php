@@ -8,6 +8,7 @@ use Alive2212\LaravelSmartRestful\BaseController;
 use Alive2212\LaravelTicketService\AliveTicket;
 use Alive2212\LaravelWalletService\AliveWalletPayment;
 use Alive2212\LaravelWalletService\LaravelWalletService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class CustomWalletController extends BaseController
@@ -48,103 +49,106 @@ class CustomWalletController extends BaseController
         ]);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function paymentList(Request $request)
     {
-        // create response object
-        $response = new ResponseModel();
-
         // get all payments records
-        $data = $this->wallet->getUserPaymentList(auth()->id());
-
-        // initialize response
-        $response->setData(collect($data));
-        $response->setMessage($this->getTrans(__FUNCTION__, 'successful'));
-        $response->setStatus(true);
+        $data = $this->wallet->getUserPaymentList(
+            $request->has('user_id') ?
+                $request['user_id'] :
+                auth()->id()
+        );
 
         // return response
-        return SmartResponse::response($response);
+        return $this->response($data, __FUNCTION__);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function credit(Request $request)
     {
         // create response object
         $response = new ResponseModel();
 
         // validate
-        $response = $this->validateRequest($request, $response,$this->userCreditValidateParams);
+        $response = $this->validateRequest($request, $response, $this->userCreditValidateParams);
 
         // show error if has any error
-        if (!is_null($response->getError())){
+        if (!is_null($response->getError())) {
             return SmartResponse::response($response);
         }
 
 
         // create wallet object and credit to user
         $data = $this->wallet->credit(
-            auth()->id(),
+            $request->has('user_id') ?
+                $request['user_id'] :
+                auth()->id(),
             $request['amount'],
             $request['stuff_title'],
             $request['description'],
-            json_decode($request['extra_value'],true),
+            json_decode($request['extra_value'], true),
             auth()->id()
         );
 
-        // initialize response
-        $response->setData(collect($data));
-        $response->setMessage($this->getTrans(__FUNCTION__, 'successful'));
-        $response->setStatus(true);
-
         // return response
-        return SmartResponse::response($response);
+        return $this->response($data, __FUNCTION__);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function debit(Request $request)
     {
         // create response object
         $response = new ResponseModel();
 
         // validate
-        $response = $this->validateRequest($request, $response,$this->userDebitValidateParams);
+        $response = $this->validateRequest($request, $response, $this->userDebitValidateParams);
 
         // show error if has any error
-        if (!is_null($response->getError())){
+        if (!is_null($response->getError())) {
+            // return false response
             return SmartResponse::response($response);
         }
 
         // create wallet object and debit from user
         $data = $this->wallet->debit(
-            auth()->id(),
+            $request->has('user_id') ?
+                $request['user_id'] :
+                auth()->id(),
             $request['amount'],
             $request['stuff_title'],
             $request['description'],
-            json_decode($request['extra_value'],true),
+            json_decode($request['extra_value'], true),
             auth()->id()
         );
 
-        // initialize response
-        $response->setData(collect($data));
-        $response->setMessage($this->getTrans(__FUNCTION__, 'successful'));
-        $response->setStatus(true);
-
         // return response
-        return SmartResponse::response($response);
+        return $this->response($data, __FUNCTION__);
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function balance(Request $request)
     {
-        // create response object
-        $response = new ResponseModel();
-
         // get user balance
-        $data =  $this->wallet->getUserBalance(auth()->id());
-
-        // initialize response
-        $response->setData(collect($data));
-        $response->setMessage($this->getTrans(__FUNCTION__, 'successful'));
-        $response->setStatus(true);
+        $data = $this->wallet->getUserBalance(
+            $request->has('user_id') ?
+                $request['user_id'] :
+                auth()->id()
+        );
 
         // return response
-        return SmartResponse::response($response);
+        return $this->response($data, __FUNCTION__);
     }
 
     /**
@@ -153,7 +157,7 @@ class CustomWalletController extends BaseController
      * @param array $validationArray
      * @return ResponseModel
      */
-    private function validateRequest(Request $request, ResponseModel $response,array $validationArray)
+    private function validateRequest(Request $request, ResponseModel $response, array $validationArray)
     {
         $validationErrors = $this->checkRequestValidation($request, $validationArray);
         if ($validationErrors != null) {
@@ -165,5 +169,27 @@ class CustomWalletController extends BaseController
             $response->setError(99);
         }
         return $response;
+    }
+
+    /**
+     * @param $data
+     * @param $methodName
+     * @param string $statusTag
+     * @param bool $status
+     * @return JsonResponse
+     */
+    public function response(array $data, $methodName, $statusTag = 'successful', $status = true): JsonResponse
+    {
+        // create response object
+        $response = new ResponseModel();
+
+        // initialize response
+        $response->setStatus($status);
+        $response->setData(collect($data));
+        $response->setMessage($this->getTrans($methodName, $statusTag));
+        $response->setStatus(true);
+
+        // return result
+        return SmartResponse::response($response);
     }
 }
