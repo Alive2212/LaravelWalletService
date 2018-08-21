@@ -141,9 +141,9 @@ class CustomWalletController extends BaseController
     public function balance(Request $request)
     {
         // get user balance
-        $data = $this->wallet->getUserBalance(
+        $data = (array) $this->wallet->getUserBalance(
             $request->has('user_id') ?
-                $request['user_id'] :
+                (int)$request['user_id'] :
                 auth()->id()
         );
 
