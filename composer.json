@@ -1,6 +1,6 @@
 {
     "name": "alive2212/laravel-wallet-service",
-    "description": ":description",
+    "description": "This is wallet package service for laravel",
     "license": "MIT",
     "authors": [
         {
