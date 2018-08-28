@@ -83,7 +83,6 @@ class CustomWalletController extends BaseController
             return SmartResponse::response($response);
         }
 
-
         // create wallet object and credit to user
         $data = $this->wallet->credit(
             $request->has('user_id') ?
@@ -92,7 +91,7 @@ class CustomWalletController extends BaseController
             $request['amount'],
             $request['stuff_title'],
             $request['description'],
-            json_decode($request['extra_value'], true),
+            $request['extra_value'],
             auth()->id()
         );
 
@@ -126,7 +125,7 @@ class CustomWalletController extends BaseController
             $request['amount'],
             $request['stuff_title'],
             $request['description'],
-            json_decode($request['extra_value'], true),
+            $request['extra_value'],
             auth()->id()
         );
 
