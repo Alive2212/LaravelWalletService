@@ -24,9 +24,6 @@ class LaravelWalletServiceServiceProvider extends ServiceProvider
         // migrations
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        // routes
-        $this->loadRoutesFrom(__DIR__ . '/routes.php');
-
         // Publishing is only necessary when using the CLI.
         if ($this->app->runningInConsole()) {
 

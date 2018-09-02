@@ -61,7 +61,6 @@ class CustomWalletController extends BaseController
                 $request['user_id'] :
                 auth()->id()
         );
-
         // return response
         return $this->response($data, __FUNCTION__);
     }
@@ -74,15 +73,12 @@ class CustomWalletController extends BaseController
     {
         // create response object
         $response = new ResponseModel();
-
         // validate
         $response = $this->validateRequest($request, $response, $this->userCreditValidateParams);
-
         // show error if has any error
         if (!is_null($response->getError())) {
             return SmartResponse::response($response);
         }
-
         // create wallet object and credit to user
         $data = $this->wallet->credit(
             $request->has('user_id') ?
@@ -107,16 +103,13 @@ class CustomWalletController extends BaseController
     {
         // create response object
         $response = new ResponseModel();
-
         // validate
         $response = $this->validateRequest($request, $response, $this->userDebitValidateParams);
-
         // show error if has any error
         if (!is_null($response->getError())) {
             // return false response
             return SmartResponse::response($response);
         }
-
         // create wallet object and debit from user
         $data = $this->wallet->debit(
             $request->has('user_id') ?
@@ -128,7 +121,6 @@ class CustomWalletController extends BaseController
             $request['extra_value'],
             auth()->id()
         );
-
         // return response
         return $this->response($data, __FUNCTION__);
     }
@@ -145,7 +137,6 @@ class CustomWalletController extends BaseController
                 (int)$request['user_id'] :
                 auth()->id()
         );
-
         // return response
         return $this->response($data, __FUNCTION__);
     }
@@ -181,13 +172,11 @@ class CustomWalletController extends BaseController
     {
         // create response object
         $response = new ResponseModel();
-
         // initialize response
         $response->setStatus($status);
         $response->setData(collect($data));
         $response->setMessage($this->getTrans($methodName, $statusTag));
         $response->setStatus(true);
-
         // return result
         return SmartResponse::response($response);
     }
