@@ -12,6 +12,13 @@ class AliveWalletPaymentController extends BaseController
      */
     protected $localPrefix = 'laravel-wallet-payment';
 
+    protected $indexLoad = [
+        'author',
+        'from',
+        'to',
+        'for'
+    ];
+
     /**
      *
      */
